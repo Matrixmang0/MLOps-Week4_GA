@@ -1,0 +1,68 @@
+name: Continuous Integration Checks
+
+on:
+  pull_request:
+    branches: [ main ]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  test-and-report:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 🐍 Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: ♻️ Cache pip dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: ☁️ Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_TOKEN }}
+
+      - name: ☁️ Set up Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: 📦 Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: 📂 Set up DVC and pull artifacts
+        run: |
+          pip install dvc[gdrive]
+          dvc pull artifacts
+
+      - name: 🧪 Run model and Feast tests
+        run: |
+          pytest test_model.py -v | tee test_output.txt
+
+      - name: 📊 Setup CML
+        uses: iterative/setup-cml@v2
+
+      - name: 📋 Create CML Report on PR
+        env:
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "## ✅ Model Test Report" > report.md
+          echo '```' >> report.md
+          cat test_output.txt >> report.md
+          echo '```' >> report.md
+          cml comment create report.md
+
