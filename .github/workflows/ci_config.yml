@@ -44,10 +44,9 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: 📂 Set up DVC and pull artifacts
+      - name: 📂 DVC pull
         run: |
-          pip install dvc[gdrive]
-          dvc pull artifacts
+          dvc pull
 
       - name: 🧪 Run model and Feast tests
         run: |
