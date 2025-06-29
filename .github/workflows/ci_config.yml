@@ -50,7 +50,7 @@ jobs:
 
       - name: 🧪 Run model and Feast tests
         run: |
-          pytest test_model.py -v | tee test_output.txt
+          pytest tests/test_model.py -v | tee test_output.txt
 
       - name: 📊 Setup CML
         uses: iterative/setup-cml@v2
