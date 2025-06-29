@@ -1,0 +1,14 @@
+project: iris_feature_store
+registry: gs://mlops-course-neural-mantra-461520-m0/iris_feature_store/registry.db
+provider: local
+
+online_store:
+    type: datastore
+    project_id: neural-mantra-461520-m0
+    namespace: Iris_Online_Store
+    
+offline_store:
+    type: bigquery
+    dataset: Iris_Online_Store
+    
+entity_key_serialization_version: 2

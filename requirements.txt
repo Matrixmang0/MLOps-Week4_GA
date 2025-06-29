@@ -1,0 +1,6 @@
+pytest
+feast[gcp]
+protobuf==5.29.0
+numpy
+pandas
+scikit-learn
