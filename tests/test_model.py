@@ -9,13 +9,13 @@ from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_sc
 from sklearn.model_selection import train_test_split
 from sklearn.base import ClassifierMixin
 
-MODEL_PATH = "../artifacts/model.joblib"
+MODEL_PATH = "./artifacts/model.joblib"
 ACCURACY_THRESHOLD = 0.9
 
 @pytest.fixture(scope="module")
 def iris_data():
     """Load and split the iris dataset."""
-    iris = pd.read_csv("../data/iris.csv")
+    iris = pd.read_csv("./data/iris.csv")
     features = iris[["sepal_length", "sepal_width", "petal_length", "petal_width"]]
     target = iris["species"]
     X_train, X_test, y_train, y_test = train_test_split(
@@ -73,7 +73,7 @@ def test_model_predict_values(loaded_model, iris_data):
 @pytest.fixture(scope="module")
 def store():
     """Return a Feast FeatureStore object pointing to the repo."""
-    return FeatureStore(repo_path="../iris_feature_store/feature_repo")
+    return FeatureStore(repo_path="./iris_feature_store/feature_repo")
 
 def test_registry_connection(store):
     feature_views = store.list_feature_views()
