@@ -44,9 +44,9 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: 📂 DVC pull
+      - name: ✅ Check DVC Setup
         run: |
-          dvc pull
+          pytest tests/test_dvc_project.py
 
       - name: 🧪 Run model and Feast tests
         run: |
