@@ -46,7 +46,7 @@ jobs:
 
       - name: ✅ Check DVC Setup
         run: |
-          pytest tests/test_dvc_project.py
+          pytest tests/test_dvc.py
 
       - name: 🧪 Run model and Feast tests
         run: |
